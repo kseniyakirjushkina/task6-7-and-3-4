@@ -10,18 +10,11 @@ body {
   border-bottom: 1px solid #f0f0f0;
 }
 
-.two-menu {
-  display: flex;
-  align-items: center;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  gap: 1rem;
+.menu-item {
   position: relative;
-  z-index: 1001;
 }
 
-.trigger-btn {
+.menu-button {
   display: inline-flex;
   align-items: center;
   font-size: 0.875rem;
@@ -34,7 +27,7 @@ body {
   font-weight: 400;
 }
 
-.hamburger-icon {
+.icon {
   width: 18px;
   height: 14px;
   position: relative;
@@ -44,7 +37,7 @@ body {
   margin-right: 0.5rem;
 }
 
-.hamburger-icon span {
+.icon span {
   display: block;
   width: 100%;
   height: 2px;
@@ -52,73 +45,64 @@ body {
   transition: all 0.2s;
 }
 
-.nav-radio,
-#close-menu {
-  display: none;
-}
-
-.bkd {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 999;
-}
-
-input[name="nav-control"]:checked ~ .bkd {
-  display: block;
-}
-
 .drop {
   display: none;
   position: absolute;
   left: 0;
-  right: 0;
-  top: 0; /* Поднимаем меню вплотную к заголовку */
+  width: 600px;
+  top: 100%;
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   z-index: 1000;
   border-top: 1px solid #f0f0f0;
 }
 
-input[name="nav-control"]:checked ~ form .drop {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 1rem;
-  padding: 1rem;
-  position: absolute;
-  top: 50px; /* Подстройте это значение, если нужно */
-}
-
-input[name="nav-control"]:checked ~ form .drop label {
-  grid-column: 1;
-}
-
-.tab-radio {
-  display: none;
-}
-
-.drop label {
+.drop.active {
   display: block;
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s;
-  font-size: 0.875rem;
 }
 
-.drop label:hover {
-  background-color: #f8f8f8;
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 0.875rem;
+  color: #666;
+  flex: 1;
+  max-width: 200px;
+  text-align: center;
+}
+
+.tab:hover {
+  color: #000;
+}
+
+.tab.active {
+  color: #000;
+  font-weight: 500;
+  position: relative;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #000;
 }
 
 .content-area {
-  padding-top: 0;
-  margin-top: -40px;
-}
-
-.tab-radio:checked + label {
-  background-color: #f8f8f8;
-  font-weight: 500;
+  padding: 1rem;
 }
 
 .women-content,
@@ -126,8 +110,8 @@ input[name="nav-control"]:checked ~ form .drop label {
   display: none;
 }
 
-#tab-women:checked ~ .content-area .women-content,
-#tab-men:checked ~ .content-area .men-content {
+.women-content.active,
+.men-content.active {
   display: block;
 }
 
@@ -162,13 +146,17 @@ input[name="nav-control"]:checked ~ form .drop label {
   position: relative;
 }
 
-.submenu-trigger {
+.category-button {
   display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  background: none;
+  border: none;
   cursor: pointer;
-}
-
-.submenu-trigger input {
-  display: none;
+  font-size: 0.875rem;
+  color: inherit;
+  position: relative;
 }
 
 .submenu {
@@ -177,19 +165,20 @@ input[name="nav-control"]:checked ~ form .drop label {
   margin-top: 0.5rem;
 }
 
-.submenu-trigger input:checked ~ .submenu {
+.submenu.active {
   display: block;
 }
 
-.submenu-trigger::after {
+.category-button::after {
   content: "+";
   position: absolute;
   right: 0;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   color: #666;
 }
 
-.submenu-trigger input:checked ~ .submenu-trigger::after {
+.category-button.active::after {
   content: "-";
 }
 
@@ -228,41 +217,36 @@ input[name="nav-control"]:checked ~ form .drop label {
   opacity: 0.9;
 }
 
-input[name="nav-control"]:checked + label .hamburger-icon span {
-  background-color: #666;
+.menu-item.active .submenu {
+  display: block;
 }
 
 @media (max-width: 768px) {
-  .two-menu {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   .drop {
+    width: 100%;
     position: static;
     box-shadow: none;
   }
 
-  input[name="nav-control"]:checked ~ form .drop {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    position: relative;
-    z-index: 1001;
+  .tabs-container {
+    flex-direction: column;
+  }
+
+  .tab {
+    max-width: none;
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 0;
+  }
+
+  .tab.active::after {
+    bottom: 0;
   }
 
   .content-area {
-    grid-column: 1;
-    margin-top: 1rem;
-    border-top: 1px solid #f0f0f0;
-    padding-top: 1rem;
+    padding: 0.5rem;
   }
 
-  .banner-link {
-    padding: 0;
-  }
-}
-
-@media (min-width: 1440px) {
   .banner-link {
     padding: 0;
   }
